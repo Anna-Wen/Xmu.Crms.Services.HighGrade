@@ -64,8 +64,10 @@ namespace Xmu.Crms.Services.HighGrade
 
             var seminars = _db.Seminar.Where(_seminar => _seminar.Course.Id == courseId).ToList();
 
-            for(int i=0;i<seminars.Count;i++)
-            _db.Seminar.Remove(seminars[i]);
+            for (int i = 0; i < seminars.Count; i++)
+            {
+                DeleteSeminarBySeminarId(seminars[i].Id);
+            }
             _db.SaveChanges();
         }
 
@@ -146,7 +148,7 @@ namespace Xmu.Crms.Services.HighGrade
             var seminar = _db.Seminar.SingleOrDefault(_seminar => _seminar.Id == seminarId);
             if (seminar == null)//I add it myself
                 throw new SeminarNotFoundException();
-
+            _topicService.DeleteTopicBySeminarId(seminarId);//删除该讨论课下的话题
             return seminar;
 
         }
@@ -168,18 +170,18 @@ namespace Xmu.Crms.Services.HighGrade
         {
             if (seminarId < 0)
                 throw new ArgumentException();
-            if (seminar == null)
-            {
-                throw new SeminarNotFoundException();
-            }
 
             //这个是引用吗
             var _seminar = _db.Seminar.Single(s => s.Id == seminarId);
-
             if (_seminar == null)
+            {
                 throw new SeminarNotFoundException();
-
-            _seminar = seminar;
+            }
+            _seminar.Name = seminar.Name;
+            _seminar.Description = seminar.Description;
+            _seminar.StartTime = seminar.StartTime;
+            _seminar.EndTime = seminar.EndTime;
+            //_db.Seminar.Add(_seminar);
             _db.SaveChanges();
 
         }
@@ -204,13 +206,11 @@ namespace Xmu.Crms.Services.HighGrade
             if (seminarId < 0)
                 throw new ArgumentException();
 
-            var seminars = _db.Seminar.Where(_seminar => _seminar.Id == seminarId).ToList();
+            Seminar seminar = _db.Seminar.Where(_seminar => _seminar.Id == seminarId).SingleOrDefault();
 
-            if (seminars == null)
+            if (seminar == null)
                 throw new SeminarNotFoundException();
-
-            for (int i = 0; i <= seminars.Count; i++)
-                _db.Seminar.Remove(seminars[i]);
+            _db.Seminar.Remove(seminar);
             _db.SaveChanges();
 
         }
