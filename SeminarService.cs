@@ -60,13 +60,11 @@ namespace Xmu.Crms.Services.HighGrade
         {
             if (courseId < 0)
                 throw new ArgumentException();
+            var course=_db.Course.Where(u => u.Id == courseId).SingleOrDefault() ?? throw new CourseNotFoundException();
 
             var seminars = _db.Seminar.Where(_seminar => _seminar.Course.Id == courseId).ToList();
 
-            if (seminars == null)
-                throw new SeminarNotFoundException();
-
-            for(int i=0;i<=seminars.Count;i++)
+            for(int i=0;i<seminars.Count;i++)
             _db.Seminar.Remove(seminars[i]);
             _db.SaveChanges();
         }
