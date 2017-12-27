@@ -148,7 +148,7 @@ namespace Xmu.Crms.Services.HighGrade
             var seminar = _db.Seminar.SingleOrDefault(_seminar => _seminar.Id == seminarId);
             if (seminar == null)//I add it myself
                 throw new SeminarNotFoundException();
-            _topicService.DeleteTopicBySeminarId(seminarId);//删除该讨论课下的话题
+            
             return seminar;
 
         }
