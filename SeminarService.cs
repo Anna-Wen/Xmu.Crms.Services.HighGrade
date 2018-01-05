@@ -10,6 +10,10 @@ using Xmu.Crms.Shared.Service;
 
 namespace Xmu.Crms.Services.HighGrade
 {
+    /// <summary>
+    /// @author Group HighGrade
+    /// @version 2.00
+    /// </summary>
     public class SeminarService : ISeminarService
     {
         private readonly CrmsContext _db;
